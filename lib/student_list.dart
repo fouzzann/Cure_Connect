@@ -7,11 +7,18 @@ import 'package:task_5/student_edit.dart';
 import 'package:task_5/student_profile.dart';
 import 'dart:io'; 
 
-class StudentList extends StatelessWidget {
+class StudentList extends StatefulWidget {
  
+  @override
+  State<StudentList> createState() => _StudentListState();
+  
+}
+
+class _StudentListState extends State<StudentList> {
   final StudentController studentController = Get.put(StudentController());
 
   @override
+  
   
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,10 +155,14 @@ class StudentList extends StatelessWidget {
         context: context,
         builder: (context) {
           return AlertDialog(
+            content:Text("Are you sure you want to Delete $name?",
+            style: TextStyle(color: Colors.white,
+            fontSize: 17
+            ),) ,
             backgroundColor: Colors.grey[900],
             shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
             title: Text(
-              "Are you sure you want to delete $name ?",
+              "Delete Student",
               style: TextStyle(color: Colors.white),
             ),
             actions: [

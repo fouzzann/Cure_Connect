@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:task_5/getx_list.dart';
 import 'student_list.dart';
 import 'package:flutter/services.dart';
 import 'db_helper.dart';
@@ -29,13 +30,13 @@ class _StudentAddState extends State<StudentAdd> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
-
+  final StudentController studentController = Get.find();
  
 
   Future<void> addData() async {
     await SQLHelper.createData(nameController.text, ageController.text,
         phoneController.text, imagePath.toString(), groupValue.toString());
-    refreshData();
+     studentController.refreshData();
   }
 
   bool _isPhotoSelected = false;
@@ -284,6 +285,7 @@ class _StudentAddState extends State<StudentAdd> {
               onPressed: () async {
                 if (!_isPhotoSelected) {
                   setState(() {
+                    refreshData();
                     photoerrorVisible = true;
                   });
                 }
