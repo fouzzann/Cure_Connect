@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:task_5/db_helper.dart';
@@ -38,7 +38,6 @@ class _StudentEditState extends State<StudentEdit> {
   String? imagePath;
   String? groupValue;
 
-  // Get the existing StudentController instance
   final StudentController studentController = Get.find<StudentController>();
 
   @override
@@ -58,7 +57,7 @@ class _StudentEditState extends State<StudentEdit> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Get.back(); // Use Get to navigate back
+            Get.back(); 
           },
           icon: Icon(Icons.arrow_back, color: Colors.white),
         ),
