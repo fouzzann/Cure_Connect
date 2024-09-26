@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:task_5/db_helper.dart';
-import 'package:task_5/student_list.dart';
+import 'package:task_5/getx_list.dart';
 
 class StudentEdit extends StatefulWidget {
   final int id;
@@ -13,28 +13,21 @@ class StudentEdit extends StatefulWidget {
   final String image;
   final String gender;
   final String phone;
-  const StudentEdit(
-      {required this.id,
-      required this.name,
-      required this.age,
-      required this.image,
-      required this.gender,
-      required this.phone});
+
+  const StudentEdit({
+    required this.id,
+    required this.name,
+    required this.age,
+    required this.image,
+    required this.gender,
+    required this.phone,
+  });
 
   @override
   State<StudentEdit> createState() => _StudentEditState();
 }
 
 class _StudentEditState extends State<StudentEdit> {
-  List<Map<String, dynamic>> allData = [];
-
-  void refreshData() async {
-    final data = await SQLHelper.getAllData();
-    setState(() {
-      allData = data;
-    });
-  }
-
   TextEditingController nameController = TextEditingController();
   TextEditingController ageController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -45,271 +38,181 @@ class _StudentEditState extends State<StudentEdit> {
   String? imagePath;
   String? groupValue;
 
-  Future<void> updateData(int id) async {
-    await SQLHelper.updateData(id, nameController.text, ageController.text,
-        phoneController.text, imagePath.toString(), groupValue.toString());
-    refreshData();
-  }
+  // Get the existing StudentController instance
+  final StudentController studentController = Get.find<StudentController>();
 
   @override
   void initState() {
-    nameController = TextEditingController(text: widget.name);
-    ageController = TextEditingController(text: widget.age);
-
-    phoneController = TextEditingController(text: widget.phone);
-    imagePath = widget.image;
-    groupValue=widget.gender;
     super.initState();
+    nameController.text = widget.name;
+    ageController.text = widget.age;
+    phoneController.text = widget.phone;
+    imagePath = widget.image;
+    groupValue = widget.gender;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.purple[100],
-      appBar: AppBar(backgroundColor:  Colors.purple,
-        centerTitle: true,
-        title: Text(
-          "EDIT STUDENT",
-          style: GoogleFonts.alatsi(),
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Get.back(); // Use Get to navigate back
+          },
+          icon: Icon(Icons.arrow_back, color: Colors.white),
         ),
+        backgroundColor: Colors.black,
+        centerTitle: true,
+        title: Text("Edit Student", style: TextStyle(color: Colors.white)),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          Stack(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                          
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(width: 5,)),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Column(
-                                  children: [
-                                    Text(
-                                      'Camera',
-                                      style: myStyle(
-                                          18, FontWeight.bold, Colors.black),
-                                    ),
-                                    IconButton(
-                                        onPressed: () {
-                                          _imageSource = ImageSource.camera;
-                                          _getImage();
-                                          Navigator.of(context,
-                                                  rootNavigator: true)
-                                              .pop();
-                                        },
-                                        icon: Icon(
-                                          Icons.camera_alt_outlined,
-                                          size: 35,
-                                          color: Colors.black,
-                                        ))
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Text(
-                                      'Gallery',
-                                      style: myStyle(
-                                          18, FontWeight.bold, Colors.black),
-                                    ),
-                                    IconButton(
-                                        onPressed: () {
-                                          _imageSource = ImageSource.gallery;
-                                          _getImage();
-                                          Navigator.of(context,
-                                                  rootNavigator: true)
-                                              .pop();
-                                        },
-                                        icon: Icon(
-                                          Icons.photo_outlined,
-                                          size: 35,
-                                          color: Colors.black,
-                                        ))
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ));
-                },
-                child: Center(
-                  child: Container(
-                    width: 160,
-                    height: 160,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.transparent),
-                    child: Image.file(
-                      File(
-                        imagePath!,
-                      ),
-                      fit: BoxFit.cover,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    _showImageSourceDialog();
+                  },
+                  child: Center(
+                    child: Container(
+                      width: 160,
+                      height: 160,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                      child: imagePath != null
+                          ? Image.file(File(imagePath!), fit: BoxFit.cover)
+                          : Container(color: Colors.grey), 
                     ),
                   ),
                 ),
-              ),
-              Positioned(
-                  right: 70,
-                  top: 100,
-                  child: CircleAvatar(
-                    radius: 20,
-                    
-                  )),
-              Positioned(right: 79, top: 107, child: Icon(Icons.edit))
-            ],
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Form(
-            key: _formKey,
-            child: Container(
+              ],
+            ),
+            SizedBox(height: 15),
+            Form(
+              key: _formKey,
+              child: Container(
                 width: double.infinity,
                 height: 360,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    TextFormField(
-                      decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.purple, width: 1),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
-                          labelText: "Name"),
-                      keyboardType: TextInputType.name,
-                      controller: nameController,
-                      validator: (value) {
-                        if (value == "") {
-                          return "please enter your name";
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.purple, width: 1),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
-                          labelText: "Age"),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(2)
-                      ],
-                      controller: ageController,
-                      validator: (value) {
-                        if (value == "") {
-                          return "please enter your age";
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.purple, width: 1),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
-                          labelText: "Phone Number"),
-                      keyboardType: TextInputType.phone,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(10),
-                      ],
-                      controller: phoneController,
-                      validator: (value) {
-                        if (value == "") {
-                          return "please enter your phone Number";
-                        } else if (value!.length != 10) {
-                          return "phone number not valid";
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          'Select Gender :',
-                          style: myStyle(16, FontWeight.bold, Colors.black),
-                        ),
-                        Row(
-                          children: [
-                            Radio(
-                                activeColor: Colors.purple,
-                                value: 'Male',
-                                groupValue: groupValue,
-                                onChanged: (value) {
-                                  setState(() {
-                                    groupValue = value;
-                                  });
-                                }),
-                            Text('Male',
-                                style:
-                                    myStyle(12, FontWeight.bold, Colors.black)),
-                            Radio(
-                                activeColor: Colors.purple,
-                                value: 'Female',
-                                groupValue: groupValue,
-                                onChanged: (value) {
-                                  setState(() {
-                                    groupValue = value;
-                                  });
-                                }),
-                            Text('Female',
-                                style:
-                                    myStyle(12, FontWeight.bold, Colors.black))
-                          ],
-                        ),
-                      ],
-                    ),
+                    _buildTextField("Name", nameController, TextInputType.name),
+                    _buildTextField("Age", ageController, TextInputType.number),
+                    _buildTextField("Phone Number", phoneController, TextInputType.phone),
+                    _buildGenderSelection(),
                   ],
-                )),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.green)),
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange[700]),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  await updateData(widget.id);
-
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => StudentList()),
-                      (route) => false);
+                  await _updateData(widget.id);
+                  Get.back(); // Return to previous screen
                 }
               },
-              child: Text(
-                "EDIT STUDENT",
-                style: GoogleFonts.akayaKanadaka(),
-              ))
-        ]),
+              child: Text("EDIT STUDENT", style: TextStyle(color: Colors.black)),
+            ),
+          ],
+        ),
       ),
+    );
+  }
+
+  Future<void> _updateData(int id) async {
+    await SQLHelper.updateData(id, nameController.text, ageController.text, phoneController.text, imagePath.toString(), groupValue.toString());
+    studentController.refreshData();
+  }
+
+  Widget _buildTextField(String label, TextEditingController controller, TextInputType keyboardType) {
+    return TextFormField(
+      style: TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.orange, width: 2), borderRadius: BorderRadius.circular(50)),
+        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.orange, width: 1), borderRadius: BorderRadius.all(Radius.circular(50))),
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.white),
+      ),
+      keyboardType: keyboardType,
+      controller: controller,
+      validator: (value) {
+        if (value == "") {
+          return "please enter your $label";
+        }
+        return null;
+      },
+    );
+  }
+
+  Row _buildGenderSelection() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Text('Select Gender :', style: myStyle(16, FontWeight.bold, Colors.black)),
+        Row(
+          children: [
+            Radio(
+              activeColor: Colors.orange[700],
+              value: 'Male',
+              groupValue: groupValue,
+              onChanged: (value) {
+                setState(() {
+                  groupValue = value.toString();
+                });
+              },
+            ),
+            Text('Male', style: myStyle(12, FontWeight.bold, Colors.white)),
+            Radio(
+              activeColor: Colors.orange[700],
+              value: 'Female',
+              groupValue: groupValue,
+              onChanged: (value) {
+                setState(() {
+                  groupValue = value.toString();
+                });
+              },
+            ),
+            Text('Female', style: myStyle(12, FontWeight.bold, Colors.white)),
+          ],
+        ),
+      ],
+    );
+  }
+
+  void _showImageSourceDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: BorderSide(width: 5)),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildImageSourceOption('Camera', ImageSource.camera),
+            _buildImageSourceOption('Gallery', ImageSource.gallery),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Column _buildImageSourceOption(String label, ImageSource source) {
+    return Column(
+      children: [
+        Text(label, style: myStyle(18, FontWeight.bold, Colors.black)),
+        IconButton(
+          onPressed: () {
+            _imageSource = source;
+            _getImage();
+            Navigator.of(context, rootNavigator: true).pop();
+          },
+          icon: Icon(Icons.camera_alt_outlined, size: 35, color: Colors.black),
+        ),
+      ],
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'student_list.dart';
 import 'package:flutter/services.dart';
 import 'db_helper.dart';
@@ -46,7 +47,7 @@ class _StudentAddState extends State<StudentAdd> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(backgroundColor:  Colors.black,
-      leading: IconButton(onPressed: (){Navigator.of(context).pop();}, icon: Icon(Icons.arrow_back,color: Colors.white,)),
+      leading: IconButton(onPressed: (){Get.back();}, icon: Icon(Icons.arrow_back,color: Colors.white,)),
         title: Text(
           "Add Student",
           style: TextStyle(
