@@ -182,7 +182,7 @@ class _StudentListState extends State<StudentList> {
                         backgroundColor: Colors.red,
                         content: Text("DATA DELETED"),
                         duration: Duration(milliseconds: 800)));
-                    studentController.refreshData(); // Refresh data after deletion
+                    studentController.refreshData(); 
                   },
                   child: Text(
                     "YES",

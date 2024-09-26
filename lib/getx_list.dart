@@ -5,12 +5,15 @@ class StudentController extends GetxController {
   var allData = <Map<String, dynamic>>[].obs;
   var _foundUsers = <Map<String, dynamic>>[].obs;
   var isLoading = true.obs;
-@override
-void onInit() {
+
+ @override
+
+ void onInit() {
     // TODO: implement onInit
     super.onInit();
     refreshData();
   }
+
  void refreshData() async{
     isLoading.value = true;
     try{
@@ -31,9 +34,11 @@ void onInit() {
           .where((element) => element['name']
               .toLowerCase()
               .contains(enteredKeyword.toLowerCase()))
-          .toList());
+          .toList()
+          );
     }
   }
 
   List<Map<String, dynamic>> get founders => _foundUsers;
+
 }
