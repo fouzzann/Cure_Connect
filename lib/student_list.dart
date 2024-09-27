@@ -42,7 +42,7 @@ class _StudentListState extends State<StudentList> {
                 ),
                 Padding(
                   padding: const EdgeInsetsDirectional.symmetric(horizontal: 15),
-                  child: TextField(
+                  child: TextField(style: TextStyle(color: Colors.white),
                     onChanged: (value) => studentController.runfilter(value),
                     decoration: InputDecoration(focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.orange,width: 2),
                     borderRadius: BorderRadius.circular(50)
