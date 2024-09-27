@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,7 +16,6 @@ class StudentEditController extends GetxController {
   // Reactive variables for image path and gender
   RxString imagePath = ''.obs;
   RxString groupValue = ''.obs;
-  
 
   ImageSource imageSource = ImageSource.camera;
 
@@ -33,7 +31,8 @@ class StudentEditController extends GetxController {
 
   // Function to update student data
   Future<void> updateStudentData(int id) async {
-    await SQLHelper.updateData(id, nameController.text, ageController.text, phoneController.text, imagePath.value, groupValue.value);
+    await SQLHelper.updateData(id, nameController.text, ageController.text,
+        phoneController.text, imagePath.value, groupValue.value);
     Get.find<StudentController>().refreshData();
   }
 

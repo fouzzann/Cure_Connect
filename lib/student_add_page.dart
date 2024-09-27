@@ -15,8 +15,8 @@ class StudentAdd extends StatefulWidget {
 
 class _StudentAddState extends State<StudentAdd> {
   String? groupValue;
-   String? imagePath;
-  late ImageSource _imageSource ;
+  String? imagePath;
+  late ImageSource _imageSource;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<Map<String, dynamic>> allData = [];
 
@@ -31,31 +31,35 @@ class _StudentAddState extends State<StudentAdd> {
   final TextEditingController ageController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final StudentController studentController = Get.find();
- 
 
   Future<void> addData() async {
     await SQLHelper.createData(nameController.text, ageController.text,
         phoneController.text, imagePath.toString(), groupValue.toString());
-     studentController.refreshData();
+    studentController.refreshData();
   }
 
   bool _isPhotoSelected = false;
   bool photoerrorVisible = false;
   bool genderErrorVisible = false;
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(backgroundColor:  Colors.black,
-      leading: IconButton(onPressed: (){Get.back();}, icon: Icon(Icons.arrow_back,color: Colors.white,)),
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            )),
         title: Text(
           "Add Student",
-          style: TextStyle(
-            color: Colors.white
-          ),
+          style: TextStyle(color: Colors.white),
         ),
-      
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -67,11 +71,13 @@ class _StudentAddState extends State<StudentAdd> {
                 onTap: () {
                   showDialog(
                       context: context,
-                      builder: (context) => AlertDialog(backgroundColor: Colors.grey[800],
-                           
+                      builder: (context) => AlertDialog(
+                            backgroundColor: Colors.grey[800],
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
-                                side: BorderSide(width: 5,)),
+                                side: BorderSide(
+                                  width: 5,
+                                )),
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
@@ -125,22 +131,22 @@ class _StudentAddState extends State<StudentAdd> {
                 },
                 child: Center(
                   child: Container(
-                   
                     height: 150,
-                    decoration:  BoxDecoration(image: DecorationImage(image:AssetImage('assets/addImage-removebg-preview.png')),
-                        borderRadius: BorderRadius.circular(10),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(
+                              'assets/addImage-removebg-preview.png')),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
               ),
-            
-              
             ],
           ),
           SizedBox(
             height: 15,
           ),
-          if (photoerrorVisible && imagePath==null)
+          if (photoerrorVisible && imagePath == null)
             Text(
               'Please add a photo',
               style: TextStyle(color: Colors.red),
@@ -153,8 +159,16 @@ class _StudentAddState extends State<StudentAdd> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  TextFormField(style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.orange,width: 2),borderRadius: BorderRadius.circular(50,),),
+                  TextFormField(
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.orange, width: 2),
+                          borderRadius: BorderRadius.circular(
+                            50,
+                          ),
+                        ),
                         enabledBorder: OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: Colors.orange, width: 1),
@@ -164,9 +178,7 @@ class _StudentAddState extends State<StudentAdd> {
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
                         labelText: "Name",
-                        labelStyle: TextStyle(color: Colors.white)
-                        ),
-                        
+                        labelStyle: TextStyle(color: Colors.white)),
                     keyboardType: TextInputType.name,
                     controller: nameController,
                     validator: (value) {
@@ -177,8 +189,16 @@ class _StudentAddState extends State<StudentAdd> {
                       }
                     },
                   ),
-                  TextFormField(style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.orange,width: 2),borderRadius: BorderRadius.circular(50,),),
+                  TextFormField(
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.orange, width: 2),
+                          borderRadius: BorderRadius.circular(
+                            50,
+                          ),
+                        ),
                         enabledBorder: OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: Colors.orange, width: 1),
@@ -187,7 +207,8 @@ class _StudentAddState extends State<StudentAdd> {
                         border: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(15))),
-                        labelText: "Age",labelStyle: TextStyle(color: Colors.white)),
+                        labelText: "Age",
+                        labelStyle: TextStyle(color: Colors.white)),
                     keyboardType: TextInputType.number,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
@@ -202,10 +223,16 @@ class _StudentAddState extends State<StudentAdd> {
                       }
                     },
                   ),
-                  TextFormField(style: TextStyle(
-                    color: Colors.white
-                  ),
-                    decoration: InputDecoration(focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.orange,width: 2),borderRadius: BorderRadius.circular(50,),),
+                  TextFormField(
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.orange, width: 2),
+                          borderRadius: BorderRadius.circular(
+                            50,
+                          ),
+                        ),
                         enabledBorder: OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: Colors.orange, width: 1),
@@ -214,7 +241,8 @@ class _StudentAddState extends State<StudentAdd> {
                         border: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(15))),
-                        labelText: "Phone Number",labelStyle: TextStyle(color: Colors.white)),
+                        labelText: "Phone Number",
+                        labelStyle: TextStyle(color: Colors.white)),
                     keyboardType: TextInputType.phone,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
@@ -247,7 +275,6 @@ class _StudentAddState extends State<StudentAdd> {
                               onChanged: (value) {
                                 setState(() {
                                   groupValue = value;
-
                                 });
                               }),
                           Text('Male',
@@ -268,7 +295,7 @@ class _StudentAddState extends State<StudentAdd> {
                       ),
                     ],
                   ),
-                  if (genderErrorVisible && groupValue==null)
+                  if (genderErrorVisible && groupValue == null)
                     Text(
                       'Please select a gender',
                       style: TextStyle(color: Colors.red),
@@ -281,7 +308,8 @@ class _StudentAddState extends State<StudentAdd> {
             height: 10,
           ),
           ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange[600]),
+              style:
+                  ElevatedButton.styleFrom(backgroundColor: Colors.orange[600]),
               onPressed: () async {
                 if (!_isPhotoSelected) {
                   setState(() {
@@ -308,14 +336,13 @@ class _StudentAddState extends State<StudentAdd> {
               },
               child: Text(
                 "Add Student",
-                style: TextStyle(
-                  color: Colors.black
-                ),
+                style: TextStyle(color: Colors.black),
               ))
         ]),
       ),
     );
   }
+
   void _getImage() async {
     final selectedImage = await ImagePicker().pickImage(source: _imageSource);
     if (selectedImage != null) {
@@ -326,6 +353,7 @@ class _StudentAddState extends State<StudentAdd> {
     }
   }
 }
+
 myStyle(double size, FontWeight weight, Color clr) {
   return TextStyle(fontSize: size, fontWeight: weight, color: clr);
 }

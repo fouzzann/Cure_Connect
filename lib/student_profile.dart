@@ -1,31 +1,29 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:task_5/model.dart';
 
 class StudentProfile extends StatelessWidget {
-  final int id;
-  final String name;
-  final String age;
-  final String phone;
-  final String gender;
-  final String images;
+  
+  final StudentModel student;
 
-  const StudentProfile(
-      {super.key,
-      required this.id,
-      required this.name,
-      required this.age,
-      required this.phone,
-      required this.gender,
-      required this.images});
-
+  const StudentProfile({ required this.student});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(backgroundColor:  Colors.black,
-      leading: IconButton(onPressed: (){Navigator.of(context).pop();},
-       icon: Icon(Icons.arrow_back),color: Colors.white,),
-        title: Text(name,style: TextStyle(color: Colors.white),),
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(Icons.arrow_back),
+          color: Colors.white,
+        ),
+        title: Text(
+          student.name,
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -36,7 +34,7 @@ class StudentProfile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircleAvatar(
-                  backgroundImage: FileImage(File('$images')),
+                  backgroundImage: FileImage(File('${student.image}')),
                   radius: 70,
                 ),
                 SizedBox(
@@ -47,9 +45,9 @@ class StudentProfile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   child: Container(
                       padding: EdgeInsetsDirectional.symmetric(horizontal: 8),
-                      decoration: BoxDecoration(color: Colors.grey[700],
+                      decoration: BoxDecoration(
+                        color: Colors.grey[700],
                         borderRadius: BorderRadius.circular(8),
-                      
                       ),
                       height: MediaQuery.of(context).size.height * 0.3,
                       width: MediaQuery.of(context).size.height * 0.3,
@@ -58,20 +56,20 @@ class StudentProfile extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "  NAME                      :  ${name.toUpperCase()}",
+                            "  NAME                      :  ${student.name.toUpperCase()}",
                             style: TextStyle(color: Colors.white),
                           ),
                           Text(
-                            "  GENDER                  :  ${gender.toUpperCase()}",
-                            style:  TextStyle(color: Colors.white),
+                            "  GENDER                  :  ${student.gender.toUpperCase()}",
+                            style: TextStyle(color: Colors.white),
                           ),
                           Text(
-                            "  AGE                         :  $age",
-                            style:  TextStyle(color: Colors.white),
+                            "  AGE                         :  $student.age",
+                            style: TextStyle(color: Colors.white),
                           ),
                           Text(
-                            " PHONE NUMBER     :  $phone",
-                            style:  TextStyle(color: Colors.white),
+                            " PHONE NUMBER     :  $student.phone",
+                            style: TextStyle(color: Colors.white),
                           ),
                         ],
                       )),

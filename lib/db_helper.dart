@@ -2,7 +2,6 @@ import 'package:sqflite/sqflite.dart' as sql;
 
 class SQLHelper {
   static Future<void> createTables(sql.Database database) async {
-         
     await database.execute(
         """CREATE TABLE data(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
      name TEXT,
@@ -15,7 +14,6 @@ class SQLHelper {
   }
 
   static Future<sql.Database> db() async {
-
     return sql.openDatabase(
       "data.db",
       version: 1,
@@ -25,9 +23,16 @@ class SQLHelper {
     );
   }
 
-  static Future<int> createData(String name, String age,String phone,String images,String gender) async {
+  static Future<int> createData(String name, String age, String phone,
+      String images, String gender) async {
     final db = await SQLHelper.db();
-    final data = {"name":name , "age": age,"phone":phone,"images":images,"gender":gender};
+    final data = {
+      "name": name,
+      "age": age,
+      "phone": phone,
+      "images": images,
+      "gender": gender
+    };
     final id = await db.insert("data", data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
     return id;
@@ -38,10 +43,15 @@ class SQLHelper {
     return db.query("data", orderBy: "id");
   }
 
-  static Future<int> updateData(int id, String name, String age,String phone,String images,String gender) async {
+  static Future<int> updateData(int id, String name, String age, String phone,
+      String images, String gender) async {
     final db = await SQLHelper.db();
     final data = {
-     "name":name , "age": age,"phone":phone,"images":images,"gender":gender
+      "name": name,
+      "age": age,
+      "phone": phone,
+      "images": images,
+      "gender": gender
     };
     final result =
         await db.update("data", data, where: "id=?", whereArgs: [id]);
@@ -49,7 +59,7 @@ class SQLHelper {
   }
 
   static Future<void> deleteData(int id) async {
-    final db =await SQLHelper.db();
-      db.delete("data",where: "id=?",whereArgs: [id]);
+    final db = await SQLHelper.db();
+    db.delete("data", where: "id=?", whereArgs: [id]);
   }
 }

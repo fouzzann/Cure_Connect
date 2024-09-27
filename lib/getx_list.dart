@@ -6,39 +6,35 @@ class StudentController extends GetxController {
   var _foundUsers = <Map<String, dynamic>>[].obs;
   var isLoading = true.obs;
 
- @override
-
- void onInit() {
+  @override
+  void onInit() {
     // TODO: implement onInit
     super.onInit();
     refreshData();
   }
 
- void refreshData() async{
+  void refreshData() async {
     isLoading.value = true;
-    try{
+    try {
       final data = await SQLHelper.getAllData();
       allData.assignAll(data);
       _foundUsers.assignAll(data);
-    }finally{
+    } finally {
       isLoading.value = false;
     }
   }
 
   void runfilter(String enteredKeyword) {
     if (enteredKeyword.isEmpty) {
-      _foundUsers.assignAll(allData); 
-   
-    }else{
-         _foundUsers.assignAll(allData
+      _foundUsers.assignAll(allData);
+    } else {
+      _foundUsers.assignAll(allData
           .where((element) => element['name']
               .toLowerCase()
               .contains(enteredKeyword.toLowerCase()))
-          .toList()
-          );
+          .toList());
     }
   }
 
   List<Map<String, dynamic>> get founders => _foundUsers;
-
 }
