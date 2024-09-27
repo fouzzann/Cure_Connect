@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_5/db_helper.dart'; 
 import 'package:task_5/getx_list.dart';
+import 'package:task_5/model.dart';
 import 'package:task_5/student_add_page.dart';
 import 'package:task_5/student_edit.dart';
 import 'package:task_5/student_profile.dart';
@@ -99,20 +100,18 @@ class _StudentListState extends State<StudentList> {
                                 children: [
                                   IconButton(
                                     onPressed: () {
-                                      Navigator.of(context).push(MaterialPageRoute(
-                                          builder: (context) => StudentEdit(
-                                              id: studentController
-                                                  .founders[index]['id'],
-                                              name: studentController
-                                                  .founders[index]['name'],
-                                              age: studentController
-                                                  .founders[index]['age'],
-                                              image: studentController
-                                                  .founders[index]['images'],
-                                              gender: studentController
-                                                  .founders[index]['gender'],
-                                              phone: studentController
-                                                  .founders[index]['phone'])));
+                                     Navigator.of(context).push(MaterialPageRoute(
+  builder: (context) => StudentEdit(
+    student: StudentModel(
+      id: studentController.founders[index]['id'],
+      name: studentController.founders[index]['name'],
+      age: studentController.founders[index]['age'],
+      image: studentController.founders[index]['images'],
+      gender: studentController.founders[index]['gender'],
+      phone: studentController.founders[index]['phone'],
+    ),
+  ),
+));
                                     },
                                     icon: Icon(
                                       Icons.edit,

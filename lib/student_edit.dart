@@ -1,63 +1,28 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:task_5/db_helper.dart';
-import 'package:task_5/getx_list.dart';
+import 'package:task_5/getx_edit.dart';
+import 'package:task_5/model.dart';
+import 'package:task_5/student_add_page.dart';
 
-class StudentEdit extends StatefulWidget {
-  final int id;
-  final String name;
-  final String age;
-  final String image;
-  final String gender;
-  final String phone;
 
-  const StudentEdit({
-    required this.id,
-    required this.name,
-    required this.age,
-    required this.image,
-    required this.gender,
-    required this.phone,
-  });
 
-  @override
-  State<StudentEdit> createState() => _StudentEditState();
-}
+class StudentEdit extends StatelessWidget {
+  final StudentModel student;
 
-class _StudentEditState extends State<StudentEdit> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController ageController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-
-  ImageSource _imageSource = ImageSource.camera;
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  String? imagePath;
-  String? groupValue;
-
-  final StudentController studentController = Get.find<StudentController>();
-
-  @override
-  void initState() {
-    super.initState();
-    nameController.text = widget.name;
-    ageController.text = widget.age;
-    phoneController.text = widget.phone;
-    imagePath = widget.image;
-    groupValue = widget.gender;
-  }
+  const StudentEdit({required this.student});
 
   @override
   Widget build(BuildContext context) {
+    final StudentEditController studentEditController = Get.put(StudentEditController(student: student));
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Get.back(); 
+            Get.back();
           },
           icon: Icon(Icons.arrow_back, color: Colors.white),
         ),
@@ -70,38 +35,34 @@ class _StudentEditState extends State<StudentEdit> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Stack(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    _showImageSourceDialog();
-                  },
-                  child: Center(
-                    child: Container(
-                      width: 160,
-                      height: 160,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                      child: imagePath != null
-                          ? Image.file(File(imagePath!), fit: BoxFit.cover)
-                          : Container(color: Colors.grey), 
-                    ),
-                  ),
+            GestureDetector(
+              onTap: () {
+                _showImageSourceDialog(studentEditController);
+              },
+              child: Obx(() => Center(
+                child: Container(
+                  width: 160,
+                  height: 160,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                  child: studentEditController.imagePath.value.isNotEmpty
+                      ? Image.file(File(studentEditController.imagePath.value), fit: BoxFit.cover)
+                      : Container(color: Colors.grey),
                 ),
-              ],
+              )),
             ),
             SizedBox(height: 15),
             Form(
-              key: _formKey,
+              key: GlobalKey<FormState>(),
               child: Container(
                 width: double.infinity,
                 height: 360,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildTextField("Name", nameController, TextInputType.name),
-                    _buildTextField("Age", ageController, TextInputType.number),
-                    _buildTextField("Phone Number", phoneController, TextInputType.phone),
-                    _buildGenderSelection(),
+                    _buildTextField("Name", studentEditController.nameController, TextInputType.name),
+                    _buildTextField("Age", studentEditController.ageController, TextInputType.number),
+                    _buildTextField("Phone Number", studentEditController.phoneController, TextInputType.phone),
+                    _buildGenderSelection(studentEditController),
                   ],
                 ),
               ),
@@ -110,10 +71,8 @@ class _StudentEditState extends State<StudentEdit> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.orange[700]),
               onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  await _updateData(widget.id);
-                  Get.back(); // Return to previous screen
-                }
+                await studentEditController.updateStudentData(student.id);
+                Get.back(); 
               },
               child: Text("EDIT STUDENT", style: TextStyle(color: Colors.black)),
             ),
@@ -123,10 +82,6 @@ class _StudentEditState extends State<StudentEdit> {
     );
   }
 
-  Future<void> _updateData(int id) async {
-    await SQLHelper.updateData(id, nameController.text, ageController.text, phoneController.text, imagePath.toString(), groupValue.toString());
-    studentController.refreshData();
-  }
 
   Widget _buildTextField(String label, TextEditingController controller, TextInputType keyboardType) {
     return TextFormField(
@@ -148,83 +103,68 @@ class _StudentEditState extends State<StudentEdit> {
     );
   }
 
-  Row _buildGenderSelection() {
+
+  Row _buildGenderSelection(StudentEditController studentEditController) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Text('Select Gender :', style: myStyle(16, FontWeight.bold, Colors.black)),
-        Row(
+        Obx(() => Row(
           children: [
             Radio(
               activeColor: Colors.orange[700],
               value: 'Male',
-              groupValue: groupValue,
+              groupValue: studentEditController.groupValue.value,
               onChanged: (value) {
-                setState(() {
-                  groupValue = value.toString();
-                });
+                studentEditController.groupValue.value = value.toString();
               },
             ),
             Text('Male', style: myStyle(12, FontWeight.bold, Colors.white)),
             Radio(
               activeColor: Colors.orange[700],
               value: 'Female',
-              groupValue: groupValue,
+              groupValue: studentEditController.groupValue.value,
               onChanged: (value) {
-                setState(() {
-                  groupValue = value.toString();
-                });
+                studentEditController.groupValue.value = value.toString();
               },
             ),
             Text('Female', style: myStyle(12, FontWeight.bold, Colors.white)),
           ],
-        ),
+        )),
       ],
     );
   }
 
-  void _showImageSourceDialog() {
+  
+  void _showImageSourceDialog(StudentEditController studentEditController) {
     showDialog(
-      context: context,
+      context: Get.context!,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: BorderSide(width: 5)),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildImageSourceOption('Camera', ImageSource.camera),
-            _buildImageSourceOption('Gallery', ImageSource.gallery),
+            _buildImageSourceOption('Camera', ImageSource.camera, studentEditController),
+            _buildImageSourceOption('Gallery', ImageSource.gallery, studentEditController),
           ],
         ),
       ),
     );
   }
 
-  Column _buildImageSourceOption(String label, ImageSource source) {
+  Column _buildImageSourceOption(String label, ImageSource source, StudentEditController studentEditController) {
     return Column(
       children: [
         Text(label, style: myStyle(18, FontWeight.bold, Colors.black)),
         IconButton(
           onPressed: () {
-            _imageSource = source;
-            _getImage();
-            Navigator.of(context, rootNavigator: true).pop();
+            studentEditController.imageSource = source;
+            studentEditController.selectImage();
+            Get.back(); // Close dialog
           },
           icon: Icon(Icons.camera_alt_outlined, size: 35, color: Colors.black),
         ),
       ],
     );
   }
-
-  void _getImage() async {
-    final selectedImage = await ImagePicker().pickImage(source: _imageSource);
-    if (selectedImage != null) {
-      setState(() {
-        imagePath = selectedImage.path;
-      });
-    }
-  }
-}
-
-myStyle(double size, FontWeight weight, Color clr) {
-  return TextStyle(fontSize: size, fontWeight: weight, color: clr);
 }
