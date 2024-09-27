@@ -43,14 +43,19 @@ class _StudentListState extends State<StudentList> {
                   padding: const EdgeInsetsDirectional.symmetric(horizontal: 15),
                   child: TextField(
                     onChanged: (value) => studentController.runfilter(value),
-                    decoration: InputDecoration(
+                    decoration: InputDecoration(focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.orange,width: 2),
+                    borderRadius: BorderRadius.circular(50)
+                    ),
                         enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(width: 1),
                             borderRadius: BorderRadius.all(Radius.circular(30))),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(30))),
                         labelText: "search",
-                        suffixIcon: Icon(Icons.search)),
+                        labelStyle: TextStyle(),
+                        suffixIcon: Icon(Icons.search,
+                        
+                        )),
                   ),
                 ),
                 Expanded(
