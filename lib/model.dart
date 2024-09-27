@@ -1,4 +1,4 @@
-class StudentModel {
+ class StudentModel {
   final int id;
   final String name;
   final String age;
@@ -17,12 +17,14 @@ class StudentModel {
 
   Map<String, dynamic> toMap() {
     return {
+
       'id': id,
       'name': name,
       'age': age,
       'image': image,
       'gender': gender,
       'phone': phone,
+
     };
   }
 
@@ -35,4 +37,6 @@ class StudentModel {
         gender: map['gender'],
         phone: map['phone']);
   }
+
+
 }

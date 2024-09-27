@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:task_5/db_helper.dart';
 import 'package:task_5/getx_list.dart';
 import 'package:task_5/model.dart';
@@ -62,10 +63,13 @@ class StudentList extends StatelessWidget {
                   child: Obx(() {
                     if (studentController.founders.isEmpty) {
                       return Center(
-                        child: Text(
-                          "No students found :(",
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
+                        child: Container(
+                          child: LottieBuilder.asset('assets/Animation - 1727442198566.json',fit: BoxFit.fill,
+                          ),
+                        
+                          height: 210,
+                          
+                        )
                       );
                     }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:task_5/student_list.dart';
 
-import 'student_list.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       theme: ThemeData(primarySwatch: Colors.orange),
       debugShowCheckedModeBanner: false,
-      home: StudentList(),
+      home: StudentList()
     );
   }
 }
