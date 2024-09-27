@@ -60,7 +60,18 @@ class _StudentListState extends State<StudentList> {
                   ),
                 ),
                 Expanded(
-                  child: Obx(() => ListView.builder(
+                  child: Obx(() {
+                   
+                    if (studentController.founders.isEmpty) {
+                      return Center(
+                        child: Text(
+                          "No students found :(",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      );
+                    }
+
+                  return ListView.builder(
                         itemCount: studentController.founders.length,
                         itemBuilder: (context, index) => GestureDetector(
                           onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -136,7 +147,7 @@ class _StudentListState extends State<StudentList> {
                             ),
                           ),
                         ),
-                      )),
+                      );} ),
                 ),
               ],
             )),
