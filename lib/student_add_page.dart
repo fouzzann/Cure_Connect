@@ -30,6 +30,7 @@ class _StudentAddState extends State<StudentAdd> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  
   final StudentController studentController = Get.find();
 
   Future<void> addData() async {
