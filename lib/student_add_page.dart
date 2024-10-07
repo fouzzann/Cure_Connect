@@ -20,12 +20,7 @@ class _StudentAddState extends State<StudentAdd> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<Map<String, dynamic>> allData = [];
 
-  void refreshData() async {
-    final data = await SQLHelper.getAllData();
-    setState(() {
-      allData = data;
-    });
-  }
+ 
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
@@ -313,10 +308,10 @@ class _StudentAddState extends State<StudentAdd> {
                   ElevatedButton.styleFrom(backgroundColor: Colors.orange[600]),
               onPressed: () async {
                 if (!_isPhotoSelected) {
-                  setState(() {
-                    refreshData();
+                  
+                    
                     photoerrorVisible = true;
-                  });
+          
                 }
                 if (groupValue == null) {
                   setState(() {

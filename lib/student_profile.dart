@@ -64,7 +64,7 @@ class StudentProfile extends StatelessWidget {
                             style: TextStyle(color: Colors.white),
                           ),
                           Text(
-                            "  AGE                         :  $student.age",
+                            "  AGE                         :  ${student.age}",
                             style: TextStyle(color: Colors.white),
                           ),
                           Text(
