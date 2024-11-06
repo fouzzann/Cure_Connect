@@ -43,6 +43,7 @@ dependencies:
   lottie: ^3.1.2
   flutter_spinkit: ^5.2.1
   flutter_bloc: ^8.1.6
+  carousel_slider: ^5.0.0
   
 
 dev_dependencies:
@@ -53,7 +54,7 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/Screenshot 2024-09-27 201808.png"
+  image_path: "assets/app logo.jpg 2.jpg"
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -75,13 +76,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     
-    - assets/users.png
-    - assets/addImage.png
-    - assets/addImage-removebg-preview.png
-    - assets/Animation - 1727442198566.json
-    - assets/Animation - 1727447671766.json
-    - assets/Screenshot 2024-09-27 201808.png
-    - assets/Animation - 1727448454971.json
+    - assets/app logo.jpg 2.jpg
+    - assets/Donex Fiance.webp
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
