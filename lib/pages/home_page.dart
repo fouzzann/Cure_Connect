@@ -13,7 +13,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -22,8 +21,7 @@ class _HomePageState extends State<HomePage> {
 
   // List of pages for navigation
   final List<Widget> _pages = [
-    // HomePage content (added here directly)
-     HomeContent(),
+    HomeContent(),
     AppointmentPage(),
     MessagePage(),
     ProfilePage(),
@@ -64,6 +62,11 @@ class _HomePageState extends State<HomePage> {
                 label: 'Profile',
               ),
             ],
+            selectedLabelStyle: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: Colors.blue,
+            ),
           ),
         ),
       ),
@@ -71,9 +74,8 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// Separate widget for HomePage content
 class HomeContent extends StatelessWidget {
-   HomeContent({super.key});
+  HomeContent({super.key});
 
   final List<String> categoryTitles = [
     'Physiotherapist',
@@ -84,12 +86,21 @@ class HomeContent extends StatelessWidget {
     'Nephrologist',
   ];
 
+  final List<String> categorysImages = [
+    'assets/physiotherapist.png',
+    'assets/teeth (2).png',
+    'assets/advertising.png',
+    'assets/brainstorm.png',
+    'assets/baby-boy.png',
+    'assets/kidneys.png',
+  ];
+
   final List<Color> categoryTextColors = [
-    Colors.green.withOpacity(0.8),
-    Colors.red.withOpacity(0.8),
-    Colors.blue.withOpacity(0.8),
-    Colors.purple.withOpacity(0.8),
-    Colors.orange.withOpacity(0.8),
+    Color.fromARGB(255, 20, 116, 24),
+    Color.fromARGB(255, 192, 47, 37),
+    Color(0xFF6082CC),
+    Color(0xFFA820AB),
+    Color(0xFFDEA200),
     Colors.black.withOpacity(0.8),
   ];
 
@@ -103,9 +114,9 @@ class HomeContent extends StatelessWidget {
   ];
 
   final List<String> imgList = [
-    'https://via.placeholder.com/600x400?text=Doctor+1',
-    'https://via.placeholder.com/600x400?text=Doctor+2',
-    'https://via.placeholder.com/600x400?text=Doctor+3',
+    'https://www.shutterstock.com/image-illustration/3d-render-doctor-cartoon-character-600nw-1960842343.jpg',
+    'https://www.shutterstock.com/image-illustration/3d-render-doctor-cartoon-character-600nw-1960842343.jpg',
+    'https://www.shutterstock.com/image-illustration/3d-render-doctor-cartoon-character-600nw-1960842343.jpg',
   ];
 
   @override
@@ -216,12 +227,13 @@ class HomeContent extends StatelessWidget {
                   children: [
                     const Text(
                       'Top rated Doctors',
-                      style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                      style:
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
                     ),
                     const SizedBox(height: 30),
                     CarouselSlider(
                       options: CarouselOptions(
-                        height: 150,
+                        height: 160,
                         autoPlay: true,
                         enlargeCenterPage: true,
                         aspectRatio: 16 / 9,
@@ -273,17 +285,28 @@ class HomeContent extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                child: Center(
-                                  child: Text(
-                                    categoryTitles[index],
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: categoryTextColors[
-                                          index % categoryTextColors.length],
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      categorysImages[index],
+                                      height: 40, // Set the image height
+                                      width: 40, // Set the image width
                                     ),
-                                  ),
+                                    const SizedBox(
+                                        height:
+                                            8), // Space between the image and text
+                                    Text(
+                                      categoryTitles[index],
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 11,
+                                        color: categoryTextColors[
+                                            index % categoryTextColors.length],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               );
                             },
